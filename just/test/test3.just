@@ -1,0 +1,24 @@
+program TestProgram {
+	int x;
+	boolean success;
+	
+	int doIt(byref int aParam) {		int d = 13;
+		d = 12;
+		aParam = 4;
+		if (d == 12 ) {
+			int k;
+			b = false;
+			k = 10;
+		}
+		int k = 5000;
+		
+		foo(25);
+	}
+	
+	int foo(int a) {
+		a = 25;
+	}
+	
+	int foo(boolean b) {
+	}
+}
