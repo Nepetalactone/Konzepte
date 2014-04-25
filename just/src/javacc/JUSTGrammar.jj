@@ -11,15 +11,28 @@ PARSER_BEGIN(JUST)
 
 package javacc;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+
 public class JUST
 {
   public static void main(String args []) throws ParseException
   {
-    JUST parser = new JUST(System.in);
+    FileInputStream fis = null;
+	try {
+		fis = new FileInputStream(new File("./just_sources/test1.just"));
+	} catch (FileNotFoundException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	}
+	
+    JUST parser = new JUST(fis);
+    
     while (true)
     {
-      System.out.println("Reading from standard input...");
-      System.out.print("Enter an expression like \"1+(2+3)*4;\" :");
+      System.out.println("Reading from input...");
       try
       {
         switch (JUST.one_line())
@@ -102,17 +115,18 @@ TOKEN : /*keywords*/
 | < IF: "if" >
 | < ELSE: "else" >
 | < WHILE: "while" >
+| < TRUE: "true" >
+| < FALSE: "false" >
 }
 
+TOKEN : { < NUMBER : (["0"-"9"])+ > }
 
-TOKEN [IGNORE_CASE]:
+TOKEN :
 {
-  < IDENT : (< NUMBER >|< WORD >)(< NUMBER >|< WORD >)* > 
-| < NUMBER : (< DIGIT >)+ >
-| < #DIGIT : [ "0"-"9" ] >
-| < WORD : (< LETTER >)+ >
-| < #LETTER: ["a"-"z", "A"-"Z"] > 
+  < IDENT : (< NUMBER >|< WORD >)(< NUMBER >|< WORD >)* >
+| < WORD : (["a"-"z", "A"-"Z"])+ >
 }
+
 
 int one_line() :
 {}
@@ -126,8 +140,8 @@ int one_line() :
     return 1;
   }
 }
-/*Ab hier einfach die Regeln aus den Folien Abschreiben: 
-CompilationUnit = "program" ident "{" Definition "}".
+/*Ab hier einfach die Regeln aus den Folien Abschreiben:
+CompilationUnit ="program" ident "{" Definition "}".
 Definition={ VarDef| FuncDef}.
 VarDef=Type ident[ Init] ";".
 Init="=" number.
@@ -164,7 +178,7 @@ void CompilationUnit() :
 void Definition() :
 {}
 {
- (	LOOKAHEAD(2)/*vorrausschauen 3 ist vorschlag von cc*/
+ (	LOOKAHEAD(3)/*vorrausschauen 3 ist vorschlag von cc*/
    VarDef() | FuncDef()
  )*
 }
@@ -175,16 +189,23 @@ void VarDef() :
 Type() < IDENT >[Init()]< SEMICOLON >
 }
 
+void TruthVal() :
+{
+}
+{
+  < TRUE > | < FALSE >
+}
+
 void Init() :
 {}
 {
-  < ASSIGN >< NUMBER >
+  < ASSIGN > (< NUMBER > | TruthVal())
 }
 
 void Type() :
 {}
 {
-  < VOID >< INT >< BOOL >
+  < VOID >|< INT >|< BOOL >
 }
 
 void FuncDef() :
@@ -202,7 +223,7 @@ void FuncHead() :
 void FormParList() :
 {}
 {
-    formPar()   (< COLON > formPar()   )*
+    formPar()   ([< COLON >] formPar()   )*
 }
 
 void formPar() :/*musste aufgeteilt werden, sonst gabs fehler*/
@@ -259,9 +280,8 @@ void IfStat() :
 void WhileStat() :
 {}
 {
-< WHILE >< LEFTBRACKET >Expr()< RIGHTBRACKET >Stat()
+< WHILE >< LEFTBRACKET >Expr()< RIGHTBRACKET > Stat()
 }
-
 void ReturnStat() :
 {}
 {
