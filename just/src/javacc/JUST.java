@@ -57,8 +57,8 @@ public class JUST implements JUSTConstants {
     throw new Error("Missing return statement in function");
   }
 
-/*Ab hier einfach die Regeln aus den Folien Abschreiben:
-CompilationUnit ="program" ident "{" Definition "}".
+/*Ab hier einfach die Regeln aus den Folien Abschreiben: 
+CompilationUnit = "program" ident "{" Definition "}".
 Definition={ VarDef| FuncDef}.
 VarDef=Type ident[ Init] ";".
 Init="=" number.

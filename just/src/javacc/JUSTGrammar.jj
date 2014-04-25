@@ -126,8 +126,8 @@ int one_line() :
     return 1;
   }
 }
-/*Ab hier einfach die Regeln aus den Folien Abschreiben:
-CompilationUnit ="program" ident "{" Definition "}".
+/*Ab hier einfach die Regeln aus den Folien Abschreiben: 
+CompilationUnit = "program" ident "{" Definition "}".
 Definition={ VarDef| FuncDef}.
 VarDef=Type ident[ Init] ";".
 Init="=" number.
