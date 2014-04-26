@@ -5,6 +5,13 @@ import grammar.symbol.Symbol;
 
 public class CodeGenerator {
 
+	private Code m_curCode;
+	public Symbol m_symbol;
+	
+	public CodeGenerator() {
+		m_curCode = new Code();
+	}
+	
 	public void generateClassFile(){
 		// TODO Auto-generated method stub
 	}
@@ -60,7 +67,8 @@ public class CodeGenerator {
 
 	public void markByLabel(Label label) {
 		add(Opcode.NOP);
-		label.m_statement = m_statements.getLast();		
+		//label.m_statement = m_statements.getLast();
+		label.m_statement = m_curCode.m_statements.getLast();
 	}
 	
 	public Descriptor newDescriptor(Symbol symbol) {
